@@ -1,0 +1,1 @@
+export { default as SearchBarWidget } from './components/SearchBarWidget.vue'

@@ -1,0 +1,1 @@
+export { default as PriceEntity } from './components/PriceEntity.vue'
