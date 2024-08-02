@@ -1,0 +1,1 @@
+export { default as BasketFeature } from './components/BasketFeature.vue'

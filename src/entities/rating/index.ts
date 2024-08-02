@@ -1,0 +1,1 @@
+export { default as RatingEntity } from './components/RatingEntity.vue'

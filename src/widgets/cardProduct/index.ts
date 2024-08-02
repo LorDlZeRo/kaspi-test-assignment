@@ -1,0 +1,1 @@
+export { default as ProductCardWidget } from './components/ProductCardWidget.vue'
