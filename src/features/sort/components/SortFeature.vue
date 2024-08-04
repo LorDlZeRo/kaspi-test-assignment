@@ -4,13 +4,8 @@
             Сортировать по
         </MainButton>
         <ul v-if="isOpen" class="dropdown-menu">
-            <li
-                v-for="option in options"
-                :key="option.value"
-                @click="selectOption(option.value)"
-                :class="{ selected: option.value === selectedOption }"
-                class="dropdown-item"
-            >
+            <li v-for="option in sortOptions" :key="option.value" @click="selectOption(option.value)"
+                :class="{ selected: option.value === selectedOption }" class="dropdown-item">
                 {{ option.text }}
             </li>
         </ul>
@@ -18,6 +13,7 @@
 </template>
 
 <script>
+import { mapGetters, mapActions } from 'vuex';
 import { MainButton } from '~/shared/ui';
 
 export default {
@@ -25,29 +21,31 @@ export default {
     components: {
         MainButton,
     },
+    computed: {
+        ...mapGetters(['getSortOptions', 'getSortOption']),
+        sortOptions() {
+            return this.getSortOptions; // Используйте опции из Vuex
+        },
+        selectedOption() {
+            return this.getSortOption;
+        }
+    },
     data() {
         return {
             isOpen: false,
-            selectedOption: "",
-            options: [
-                { value: "price-asc", text: "Цена: по возрастанию" },
-                { value: "price-desc", text: "Цена: по убыванию" },
-                { value: "name-asc", text: "Название: A-Z" },
-                { value: "name-desc", text: "Название: Z-A" },
-            ],
         };
     },
     methods: {
+        ...mapActions(['setSortOption']),
         toggleDropdown() {
             this.isOpen = !this.isOpen;
         },
         selectOption(value) {
-            this.selectedOption = value;
+            this.setSortOption(value); // Отправка выбранной опции в Vuex
             this.isOpen = false;
-            this.$emit("update:selected", value);
         },
         handleClickOutside(event) {
-            if (!this.$refs.dropdown.contains(event.target)) {
+            if (this.$refs.dropdown && !this.$refs.dropdown.contains(event.target)) {
                 this.isOpen = false;
             }
         },

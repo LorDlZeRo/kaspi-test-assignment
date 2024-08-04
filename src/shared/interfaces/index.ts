@@ -22,6 +22,11 @@ export interface BasketItem {
   orderId: string;
 }
 
+export interface SortOption {
+  value: string;
+  text: string;
+}
+
 export interface State {
   products: Product[];
   favouriteProducts: Product[];
@@ -31,4 +36,6 @@ export interface State {
   totalAmount: number;
   loading: boolean;
   searchQuery: string;
+  sortOptions: SortOption[];
+  sortOption: string;
 }

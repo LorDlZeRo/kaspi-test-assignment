@@ -11,9 +11,43 @@ export const state = (): State => ({
   totalAmount: 0,
   loading: false,
   searchQuery: "",
+  sortOptions: [
+    { value: "price-asc", text: "Цена: по возрастанию" },
+    { value: "price-desc", text: "Цена: по убыванию" },
+    { value: "name-asc", text: "Название: A-Z" },
+    { value: "name-desc", text: "Название: Z-A" },
+    { value: "orderCount-asc", text: "Количество: по возрастанию" },
+    { value: "orderCount-desc", text: "Количество: по убыванию" },
+],
+sortOption: "price-asc"
 });
 
 export const mutations: MutationTree<State> = {
+  setSortOption(state, sortOption: string) {
+    function sortProducts(products: Product[], sortOption: string): Product[] {
+      return [...products].sort((a, b) => {
+          switch (sortOption) {
+              case "price-asc":
+                  return a.price - b.price;
+              case "price-desc":
+                  return b.price - a.price;
+              case "name-asc":
+                  return a.name.short.localeCompare(b.name.short);
+              case "name-desc":
+                  return b.name.short.localeCompare(a.name.short);
+              case "orderCount-asc":
+                  return (a.orderCount || 0) - (b.orderCount || 0);
+              case "orderCount-desc":
+                  return (b.orderCount || 0) - (a.orderCount || 0);
+              default:
+                  return 0;
+          }
+      });
+  }
+  state.sortOption = sortOption;
+  state.products = sortProducts(state.products, sortOption);
+},
+
   setLoading(state, isLoading) {
     state.loading = isLoading;
   },
@@ -209,6 +243,12 @@ export const getters: GetterTree<State, any> = {
       );
     });
   },
+  getSortOption(state) {
+    return state.sortOption;
+  },
+  getSortOptions(state) {
+    return state.sortOptions;
+},
 };
 
 export const actions: ActionTree<State, any> = {
@@ -241,5 +281,8 @@ export const actions: ActionTree<State, any> = {
   },
   checkoutBasket({ commit }) {
     commit("checkoutBasket");
+  },
+  setSortOption({ commit }, sortOption: string) {
+    commit("setSortOption", sortOption);
   },
 };
