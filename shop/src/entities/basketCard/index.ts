@@ -1,1 +1,0 @@
-export { default as BasketCardEntity } from './components/BasketCardEntity.vue'

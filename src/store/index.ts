@@ -105,15 +105,14 @@ export const mutations: MutationTree<State> = {
     { productId, quantity }: { productId: string; quantity: number }
   ) {
     const basketItem = state.basket.find(
-      (item) => item.product._id === productId
+      (item) => item.product._id === productId && !item.isPurchased
     );
-
+  
     if (basketItem) {
       basketItem.quantity = quantity;
     }
-
+  
     this.commit("calculateTotalAmount");
-
     localStorage.setItem("basket", JSON.stringify(state.basket));
   },
   updatePurchasedCounts(state) {
@@ -148,24 +147,22 @@ export const mutations: MutationTree<State> = {
     localStorage.setItem("basket", JSON.stringify(state.basket));
   },
   checkoutBasket(state) {
-    const uniqueOrderId = uuidv4();
     let totalAmount = 0;
-
+  
     state.basket.forEach((item) => {
       if (!item.isPurchased) {
         item.isPurchased = true;
-        item.orderId = uniqueOrderId;
+        item.orderId = uuidv4(); // генерация нового orderId для каждого элемента
         totalAmount += item.product.price * item.quantity;
       }
     });
-
+  
     state.totalAmount = totalAmount;
     state.isBasketCheckedOut = true;
-
+  
     localStorage.setItem("basket", JSON.stringify(state.basket));
     state.totalAmount = 0;
     this.commit("updatePurchasedCounts");
-    state.basket = JSON.parse(localStorage.getItem('basket') || '[]');
   },
   calculateTotalAmount(state) {
     let totalAmount = 0;

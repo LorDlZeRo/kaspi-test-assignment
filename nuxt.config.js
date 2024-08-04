@@ -62,6 +62,6 @@ export default {
     }
   },
   env: {
-    API_URL: process.env.API_URL || 'https://default-api-url.com'
+    API_URL: process.env.API_URL || 'https://netlifylordlzerotest.netlify.app/.netlify/functions/api/get/products'
   },
 }

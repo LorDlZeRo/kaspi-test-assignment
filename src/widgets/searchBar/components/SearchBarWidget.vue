@@ -1,8 +1,12 @@
 <script>
 import Vue from "vue";
+import { SortFeature } from "~/features/sort";
 
 export default Vue.extend({
   name: "SearchBarWidget",
+  components: {
+    SortFeature
+  },
   data() {
     return {
       searchTerm: ""
@@ -35,6 +39,7 @@ export default Vue.extend({
         <span class="my-city-name"> Алматы </span>
       </div>
     </div>
+    <SortFeature />
   </div>
 </template>
 
