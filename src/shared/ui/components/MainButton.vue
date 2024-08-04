@@ -1,29 +1,33 @@
 <script lang="ts">
-export default {
+import Vue from 'vue';
+
+export default Vue.extend({
   name: 'CustomButton',
   props: {
     color: {
       type: String,
-      default: 'red',
-    },
+      default: 'red'
+    }
   },
   computed: {
-    buttonClass() {
+    buttonClass(): string {
       return `button-${this.color}`;
-    },
+    }
   },
   methods: {
-    handleClick(event: MouseEvent) {
+    handleClick(event: MouseEvent): void {
       this.$emit('click', event);
-    },
+    }
   }
-};
+});
 </script>
+
 <template>
-  <button :class="buttonClass" v-bind="$attrs"  @click="handleClick">
+  <button :class="buttonClass" v-bind="$attrs" @click="handleClick">
     <slot>Название кнопки</slot>
   </button>
 </template>
+
 <style>
 .button-red,
 .button-blue,
@@ -67,11 +71,13 @@ export default {
   background: #5a6268;
   border-color: #5a6268;
 }
+
 button:disabled {
   background-color: gray;
   border-color: #6c757d;
   cursor: not-allowed;
 }
+
 button:disabled:hover {
   background-color: gray;
   border-color: #6c757d;
