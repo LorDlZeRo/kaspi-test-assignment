@@ -14,7 +14,6 @@ export default Vue.extend({
   },
   watch: {
     searchTerm(newTerm) {
-      console.log(this.searchTerm);
       this.$store.commit('setSearchQuery', newTerm);
     }
   }

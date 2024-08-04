@@ -1,5 +1,6 @@
 <script lang="ts">
 import Vue from "vue";
+import { mapGetters } from "vuex";
 import { ProductCardWidget } from "~/widgets/cardProduct";
 import { Spinner } from "~/shared/ui";
 
@@ -15,9 +16,7 @@ export default Vue.extend({
      this.$store.dispatch("fetchProducts", url);
   },
   computed: {
-    products() {
-      return this.$store.getters["getProducts"];
-    },
+    ...mapGetters(['filteredProducts']),
     amountPage() {
       return this.$store.getters["getAmountPage"];
     },
@@ -32,5 +31,5 @@ export default Vue.extend({
   <div v-if="isLoading" class="spinner">
     <Spinner />
   </div>
-  <ProductCardWidget v-else :products="products" />
+  <ProductCardWidget v-else :products="filteredProducts" />
 </template>
