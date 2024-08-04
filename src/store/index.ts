@@ -18,35 +18,35 @@ export const state = (): State => ({
     { value: "name-desc", text: "Название: Z-A" },
     { value: "orderCount-asc", text: "Количество: по возрастанию" },
     { value: "orderCount-desc", text: "Количество: по убыванию" },
-],
-sortOption: "price-asc"
+  ],
+  sortOption: "price-asc"
 });
 
 export const mutations: MutationTree<State> = {
   setSortOption(state, sortOption: string) {
     function sortProducts(products: Product[], sortOption: string): Product[] {
       return [...products].sort((a, b) => {
-          switch (sortOption) {
-              case "price-asc":
-                  return a.price - b.price;
-              case "price-desc":
-                  return b.price - a.price;
-              case "name-asc":
-                  return a.name.short.localeCompare(b.name.short);
-              case "name-desc":
-                  return b.name.short.localeCompare(a.name.short);
-              case "orderCount-asc":
-                  return (a.orderCount || 0) - (b.orderCount || 0);
-              case "orderCount-desc":
-                  return (b.orderCount || 0) - (a.orderCount || 0);
-              default:
-                  return 0;
-          }
+        switch (sortOption) {
+          case "price-asc":
+            return a.price - b.price;
+          case "price-desc":
+            return b.price - a.price;
+          case "name-asc":
+            return a.name.short.localeCompare(b.name.short);
+          case "name-desc":
+            return b.name.short.localeCompare(a.name.short);
+          case "orderCount-asc":
+            return (a.orderCount || 0) - (b.orderCount || 0);
+          case "orderCount-desc":
+            return (b.orderCount || 0) - (a.orderCount || 0);
+          default:
+            return 0;
+        }
       });
-  }
-  state.sortOption = sortOption;
-  state.products = sortProducts(state.products, sortOption);
-},
+    }
+    state.sortOption = sortOption;
+    state.products = sortProducts(state.products, sortOption);
+  },
 
   setLoading(state, isLoading) {
     state.loading = isLoading;
@@ -131,7 +131,7 @@ export const mutations: MutationTree<State> = {
       });
     }
 
-    this.commit("calculateTotalAmount");
+    mutations.calculateTotalAmount(state); 
     localStorage.setItem("basket", JSON.stringify(state.basket));
   },
   updateBasketItemQuantity(
@@ -141,12 +141,12 @@ export const mutations: MutationTree<State> = {
     const basketItem = state.basket.find(
       (item) => item.product._id === productId && !item.isPurchased
     );
-  
+
     if (basketItem) {
       basketItem.quantity = quantity;
     }
-  
-    this.commit("calculateTotalAmount");
+
+    mutations.calculateTotalAmount(state); 
     localStorage.setItem("basket", JSON.stringify(state.basket));
   },
   updatePurchasedCounts(state) {
@@ -172,17 +172,18 @@ export const mutations: MutationTree<State> = {
 
     localStorage.setItem("purchasedItems", JSON.stringify(purchasedItemsArray));
   },
+
   removeFromBasket(state, { productId, orderId }) {
     state.basket = state.basket.filter(
       (item) => !(item.product._id === productId && item.orderId === orderId)
     );
 
-    this.commit("calculateTotalAmount");
+    mutations.calculateTotalAmount(state);
     localStorage.setItem("basket", JSON.stringify(state.basket));
   },
   checkoutBasket(state) {
     let totalAmount = 0;
-  
+
     state.basket.forEach((item) => {
       if (!item.isPurchased) {
         item.isPurchased = true;
@@ -190,13 +191,18 @@ export const mutations: MutationTree<State> = {
         totalAmount += item.product.price * item.quantity;
       }
     });
-  
+
     state.totalAmount = totalAmount;
     state.isBasketCheckedOut = true;
-  
     localStorage.setItem("basket", JSON.stringify(state.basket));
+  
     state.totalAmount = 0;
-    this.commit("updatePurchasedCounts");
+    const basketData = localStorage.getItem("basket")
+    if (basketData) {
+      state.basket = JSON.parse(basketData);
+    } else {
+      state.basket = [];
+    }
   },
   calculateTotalAmount(state) {
     let totalAmount = 0;
@@ -235,7 +241,6 @@ export const getters: GetterTree<State, any> = {
       return state.products;
     }
     return state.products.filter((product) => {
-      
       const productName = product.name.short;
       return (
         typeof productName === "string" &&
@@ -248,7 +253,7 @@ export const getters: GetterTree<State, any> = {
   },
   getSortOptions(state) {
     return state.sortOptions;
-},
+  }
 };
 
 export const actions: ActionTree<State, any> = {

@@ -1,6 +1,7 @@
 <script lang="ts">
 import Vue from "vue";
 import { mapState } from "vuex";
+import { State, BasketItem } from "~/shared/interfaces";
 import { LogoEntity } from "~/entities/logo";
 
 export default Vue.extend({
@@ -9,14 +10,14 @@ export default Vue.extend({
     LogoEntity
   },
   computed: {
-    ...mapState(["basket"]),
+    ...mapState<State>(["basket"]),
     unpurchasedItemCount(): number {
-      return this.basket.reduce((count, item) => {
+
+      return (this as any).basket.reduce((count: number, item: BasketItem) => {
         return item.isPurchased ? count : count + item.quantity;
       }, 0);
     },
   },
-
 });
 </script>
 <template>
@@ -36,11 +37,13 @@ export default Vue.extend({
   justify-content: space-between;
   align-items: center;
 }
+
 .basket-icon-text {
   color: #1398db;
   font-size: 14px;
   font-weight: bold;
 }
+
 .basket-icon {
   color: #1398db;
 }
