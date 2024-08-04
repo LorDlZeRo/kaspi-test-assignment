@@ -203,6 +203,7 @@ export const mutations: MutationTree<State> = {
     } else {
       state.basket = [];
     }
+    mutations.updatePurchasedCounts(state);
   },
   calculateTotalAmount(state) {
     let totalAmount = 0;
