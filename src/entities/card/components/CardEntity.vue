@@ -22,7 +22,7 @@ export default Vue.extend({
     </div>
     <div class="card-divider"></div>
     <div class="card-name-wrapper">
-      <nuxt-link to="/basket" class="card-text-name-link" as="script">{{
+      <nuxt-link to="/" class="card-text-name-link" as="script">{{
         item.name.short
       }}</nuxt-link>
     </div>

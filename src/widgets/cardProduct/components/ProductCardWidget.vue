@@ -47,7 +47,7 @@ export default Vue.extend({
         </div>
         <PriceEntity :price="item.price" />
         <div class="card-button-wrapper">
-          <MainButton color="blue" @click="addToCart(item)"></MainButton>
+          <MainButton color="blue" @click="addToCart(item)">Добавить в корзину</MainButton>
         </div>
         <div class="fav-wrapper">
           <font-awesome-icon
